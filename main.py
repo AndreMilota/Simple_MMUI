@@ -1,13 +1,11 @@
 import os
 import GUI as gui
 
-
 # load the lange chain stuff
 open_ai_key = os.environ.get('OPENAI_API_KEY')
 print("len(OPENAI_API_KEY)", len(open_ai_key))
 hugging_face_key = os.environ.get('HUGGING_FACE_API_KEY')
 print("len(HUGGING_FACE_API_KEY)", len(hugging_face_key))
-
 langchain_api_key = os.environ.get('LANG_CHAIN_KEY')
 print("len(LANG_CHAIN_KEY)", len(langchain_api_key))
 
@@ -16,11 +14,6 @@ llm = ChatOpenAI(api_key=open_ai_key)
 
 from langchain_core.tools import tool
 
-@tool
-def multiply(first_int: int, second_int: int) -> int:
-    """Multiply two integers together."""
-    out = first_int * second_int
-    return out
 
 from langchain import hub
 from langchain.agents import AgentExecutor, create_tool_calling_agent
@@ -46,16 +39,6 @@ for e in prompt.messages:
 # """
 # prompt = PromptTemplate.from_template(template)
 
-@tool
-def add(first_int: int, second_int: int) -> int:
-    "Add two integers."
-    return first_int + second_int
-
-@tool
-def exponentiate(base: int, exponent: int) -> int:
-    "Exponentiate the base to the exponent power."
-    return base**exponent
-
 window = gui.Window()
 
 @tool
@@ -64,7 +47,7 @@ def set_buttion_color(button_index: int, new_color: str) -> None:
     button = [None, window.button1, window.button2][button_index]
     button.config(bg=new_color)
 
-tools = [multiply, add, exponentiate, set_buttion_color]
+tools = [set_buttion_color]
 
 # Construct the tool calling agent
 agent = create_tool_calling_agent(llm, tools, prompt)

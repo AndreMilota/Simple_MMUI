@@ -22,33 +22,36 @@ from langchain_core.messages import AIMessage, HumanMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
-# Get the prompt to use - can be replaced with any prompt that includes variables "agent_scratchpad" and "input"!
-prompt = hub.pull("hwchase17/openai-tools-agent")
-prompt.pretty_print()
-print(type(prompt))
-print(dir(prompt))
-for e in prompt.messages:
-    print(e)
 
-# Create a window
-window = gui.Window("test 1")
+def main():
+    # Get the prompt to use - can be replaced with any prompt that includes variables "agent_scratchpad" and "input"!
+    prompt = hub.pull("hwchase17/openai-tools-agent")
+    prompt.pretty_print()
+    print(type(prompt))
+    print(dir(prompt))
+    for e in prompt.messages:
+        print(e)
 
-llm = ChatOpenAI(api_key=open_ai_key) # Set the llm to the OpenAI API
-@tool
-def set_buttion_color(button_index: int, new_color: str) -> None:
-    """Set the background color of a button. There are 2 buttons, 1 and 2"""
-    button = [None, window.button1, window.button2][button_index]
-    button.config(bg=new_color)
+    # Create a window
+    window = gui.Window("hwchase17")
 
+    llm = ChatOpenAI(api_key=open_ai_key) # Set the llm to the OpenAI API
+    @tool
+    def set_buttion_color(button_index: int, new_color: str) -> None:
+        """Set the background color of a button. There are 2 buttons, 1 and 2"""
+        button = [None, window.button1, window.button2][button_index]
+        button.config(bg=new_color)
 
+    tools = [set_buttion_color]
 
-tools = [set_buttion_color]
+    # Construct the tool calling agent
+    agent = create_tool_calling_agent(llm, tools, prompt)
 
-# Construct the tool calling agent
-agent = create_tool_calling_agent(llm, tools, prompt)
+    # Create an agent executor by passing in the agent and tools
+    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-# Create an agent executor by passing in the agent and tools
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+    window.set_agent_executor(agent_executor)
+    window.run()
 
-window.set_agent_executor(agent_executor)
-window.run()
+if __name__ == "__main__":
+    main()

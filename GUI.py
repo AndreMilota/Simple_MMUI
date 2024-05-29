@@ -1,11 +1,11 @@
 import tkinter as tk
 
 class Window:
-    def __init__(self):
+    def __init__(self, title):
         self.gesture = ""
 
         self.root = tk.Tk()
-        self.root.title("Simple MMUI")
+        self.root.title(title)
 
         # Create text entry box
         self.text_entry = tk.Text(self.root, width=50, height=20)

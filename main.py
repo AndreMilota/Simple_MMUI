@@ -10,10 +10,9 @@ langchain_api_key = os.environ.get('LANG_CHAIN_KEY')
 print("len(LANG_CHAIN_KEY)", len(langchain_api_key))
 
 from langchain_openai import ChatOpenAI
-llm = ChatOpenAI(api_key=open_ai_key)
+
 
 from langchain_core.tools import tool
-
 
 from langchain import hub
 from langchain.agents import AgentExecutor, create_tool_calling_agent
@@ -31,21 +30,17 @@ print(dir(prompt))
 for e in prompt.messages:
     print(e)
 
+# Create a window
+window = gui.Window("test 1")
 
-#
-# template = """You are a multimodal agent. You can control the colors of widgets in a GUI and perform. You will get descriptions of the widgets the user clicked on and the user's commands.
-# New_Question: {command}
-# Description_of_gesture: {gesture}
-# """
-# prompt = PromptTemplate.from_template(template)
-
-window = gui.Window()
-
+llm = ChatOpenAI(api_key=open_ai_key) # Set the llm to the OpenAI API
 @tool
 def set_buttion_color(button_index: int, new_color: str) -> None:
     """Set the background color of a button. There are 2 buttons, 1 and 2"""
     button = [None, window.button1, window.button2][button_index]
     button.config(bg=new_color)
+
+
 
 tools = [set_buttion_color]
 

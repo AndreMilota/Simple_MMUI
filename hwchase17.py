@@ -33,7 +33,7 @@ def main():
         print(e)
 
     # Create a window
-    window = gui.Window("main")
+    window = gui.Window("hwchase17")
 
     llm = ChatOpenAI(api_key=open_ai_key) # Set the llm to the OpenAI API
     @tool

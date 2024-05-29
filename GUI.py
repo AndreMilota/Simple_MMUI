@@ -2,7 +2,7 @@ import tkinter as tk
 
 class Window:
     def __init__(self, title):
-        self.gesture = ""
+        self.gestures = ""
 
         self.root = tk.Tk()
         self.root.title(title)
